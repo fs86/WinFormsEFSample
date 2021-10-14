@@ -4,17 +4,26 @@ using System;
 using System.Windows.Forms;
 using WinFormsEFSample.DataAccess;
 using WinFormsEFSample.Forms;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace WinFormsEFSample
 {
     static class Program
     {
+        public static IConfiguration Configuration { get; set; }
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
+            var configBuilder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            Configuration = configBuilder.Build();
+
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -25,6 +34,7 @@ namespace WinFormsEFSample
 
             using var serviceProvider = services.BuildServiceProvider();
             var mainForm = serviceProvider.GetRequiredService<MainForm>();
+
             Application.Run(mainForm);
         }
 
@@ -34,9 +44,13 @@ namespace WinFormsEFSample
             //.AddScoped<IBusinessLayer, CBusinessLayer>()
             //.AddSingleton<IDataAccessLayer, CDataAccessLayer>();
 
+            var connectionString = Configuration.GetSection("appSettings")
+                .Get<AppConfig>().ConnectionString;
+
             services.AddLogging(configure => configure.AddConsole())
                 .AddScoped<MainForm>()
-                .AddSingleton<WinFormsEFSampleDbContext>();
+                .AddDbContext<WinFormsEFSampleDbContext>(
+                    options => options.UseSqlServer(connectionString));
         }
     }
 }
