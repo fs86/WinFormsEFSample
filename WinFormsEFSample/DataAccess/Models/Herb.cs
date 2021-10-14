@@ -1,10 +1,11 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using WinFormsEFSample.DataAccess.Models.Common;
 
 namespace WinFormsEFSample.DataAccess.Models
 {
-    public class Herb
+    public class Herb : EntityBase
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
+        public virtual IEnumerable<Season> Seasons { get; set; }
     }
 }

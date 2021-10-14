@@ -1,13 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WinFormsEFSample.DataAccess.Config;
+using WinFormsEFSample.DataAccess.Models;
 
-namespace WinFormsEFSample.Db
+namespace WinFormsEFSample.DataAccess
 {
     public class WinFormsEFSampleDbContext : DbContext
     {
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            HerbEntityConfig.Set(modelBuilder.Entity<Herb>());
+
+            DbInitializer.Seed(modelBuilder);
+        }
+
+        public DbSet<Herb> Herb { get; set; }
+        public DbSet<Season> Season { get; set; }
     }
 }

@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Windows.Forms;
+using WinFormsEFSample.DataAccess;
 using WinFormsEFSample.Forms;
 
 namespace WinFormsEFSample
@@ -29,12 +30,13 @@ namespace WinFormsEFSample
 
         private static void ConfigureServices(ServiceCollection services)
         {
-            services.AddLogging(configure => configure.AddConsole())
-                .AddScoped<MainForm>();
+            //.AddScoped<IBusinessLayer, CBusinessLayer>()
+            //.AddScoped<IBusinessLayer, CBusinessLayer>()
+            //.AddSingleton<IDataAccessLayer, CDataAccessLayer>();
 
-                    //.AddScoped<IBusinessLayer, CBusinessLayer>()
-                    //.AddScoped<IBusinessLayer, CBusinessLayer>()
-                    //.AddSingleton<IDataAccessLayer, CDataAccessLayer>();
+            services.AddLogging(configure => configure.AddConsole())
+                .AddScoped<MainForm>()
+                .AddSingleton<WinFormsEFSampleDbContext>();
         }
     }
 }
