@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using WinFormsEFSample.DataAccess.Models;
 
 namespace WinFormsEFSample.DataAccess
@@ -13,16 +14,25 @@ namespace WinFormsEFSample.DataAccess
             {
                 new Herb
                 {
-                    Id = Guid.NewGuid(),
+                    Id = new Guid("d6b2ae7f-82f4-4099-86a9-556a62338271"),
                     Name = "Anis",
-                    Seasons = new List<Season>
-                    {
-                        new Season { From = "September", To = "November" }
-                    }
                 }
             };
 
             modelBuilder.Entity<Herb>().HasData(herbs);
+
+            var seasons = new Season[]
+            {
+                new Season
+                {
+                    Id = new Guid("e358d618-d376-439a-9cd3-5e2c02849103"),
+                    HerbId = herbs.First(herb => herb.Name == "Anis").Id,
+                    From = "September",
+                    To = "November"
+                }
+            };
+
+            modelBuilder.Entity<Season>().HasData(seasons);
         }
     }
 }
