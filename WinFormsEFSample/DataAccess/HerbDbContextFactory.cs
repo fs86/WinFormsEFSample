@@ -9,16 +9,14 @@ namespace WinFormsEFSample.DataAccess
 {
     public class HerbDbContextFactory : IDesignTimeDbContextFactory<HerbDbContext>
     {
-        public static IConfiguration Configuration { get; set; }
-
         public HerbDbContext CreateDbContext(string[] args)
         {
             var configBuilder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-            Configuration = configBuilder.Build();
+            var config = configBuilder.Build();
 
-            var connectionString = Configuration.GetSection("appSettings")
+            var connectionString = config.GetSection("appSettings")
                 .Get<AppConfig>().ConnectionString;
 
             var optionsBuilder = new DbContextOptionsBuilder<HerbDbContext>();

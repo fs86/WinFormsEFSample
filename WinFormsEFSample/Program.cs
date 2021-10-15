@@ -13,19 +13,12 @@ namespace WinFormsEFSample
 {
     internal static class Program
     {
-        public static IConfiguration Configuration { get; set; }
-
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
         private static void Main()
         {
-            var configBuilder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-            Configuration = configBuilder.Build();
-
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -49,8 +42,15 @@ namespace WinFormsEFSample
 
         private static void ConfigureServices(ServiceCollection services)
         {
-            var connectionString = Configuration.GetSection("appSettings")
+            var configBuilder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            var config = configBuilder.Build();
+
+            var connectionString = config.GetSection("appSettings")
                 .Get<AppConfig>().ConnectionString;
+
+            services.AddSingleton<IConfiguration>(config);
 
             services.AddLogging(loggingBuilder => loggingBuilder.AddConsole());
             services.AddDbContext<HerbDbContext>(options => options.UseSqlServer(connectionString));
