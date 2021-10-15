@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinFormsEFSample.Service.Contract;
 
@@ -14,14 +15,37 @@ namespace WinFormsEFSample.Forms
         {
             _logger = logger;
             _herbService = herbService;
+            
             InitializeComponent();
+
+            dgvHerbs.AutoGenerateColumns = false;
+            lblStatus.Text = string.Empty;
         }
 
-        private async void btnTest_Click(object sender, System.EventArgs e)
+        private async Task LoadData()
         {
+            lblStatus.Text = "Loading data ...";
+
+            dgvHerbs.DataSource = null;
+
             var herbs = await _herbService.GetAllHerbs();
 
-            MessageBox.Show($"In der Datenbank sind {herbs.Count()} Gartenkräuter registriert.");
+            var bindingSource = new BindingSource();
+            bindingSource.DataSource = herbs;
+
+            dgvHerbs.DataSource = bindingSource;
+
+            lblStatus.Text = $"{herbs.Count()} herbs found in database.";
+        }
+
+        private async void MainForm_Load(object sender, System.EventArgs e)
+        {
+            await LoadData();
+        }
+
+        private async void btnRefresh_Click(object sender, System.EventArgs e)
+        {
+            await LoadData();
         }
     }
 }
