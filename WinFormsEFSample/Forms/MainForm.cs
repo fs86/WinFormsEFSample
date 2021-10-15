@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using System.Linq;
 using System.Windows.Forms;
 using WinFormsEFSample.Service.Contract;
 
@@ -14,6 +15,13 @@ namespace WinFormsEFSample.Forms
             _logger = logger;
             _herbService = herbService;
             InitializeComponent();
+        }
+
+        private async void btnTest_Click(object sender, System.EventArgs e)
+        {
+            var herbs = await _herbService.GetAllHerbs();
+
+            MessageBox.Show($"In der Datenbank sind {herbs.Count()} Gartenkräuter registriert.");
         }
     }
 }
