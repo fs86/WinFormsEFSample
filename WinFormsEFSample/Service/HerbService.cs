@@ -19,12 +19,16 @@ namespace WinFormsEFSample.Service
 
         public async Task<IEnumerable<Herb>> GetAllHerbs()
         {
-            return await _dbContext.Herb.ToListAsync();
+            return await _dbContext.Herb
+                .Include(herb => herb.Seasons)
+                .ToListAsync();
         }
 
         public async Task<Herb> GetHerbById(Guid id)
         {
-            return await _dbContext.Herb.FirstOrDefaultAsync(herb => herb.Id == id);
+            return await _dbContext.Herb
+                .Include(herb => herb.Seasons)
+                .FirstOrDefaultAsync(herb => herb.Id == id);
         }
     }
 }
