@@ -35,9 +35,7 @@ namespace WinFormsEFSample
                 context?.Database.EnsureCreated();
             }
 
-            var mainForm = serviceProvider.GetRequiredService<MainForm>();
-
-            Application.Run(mainForm);
+            Application.Run(serviceProvider.GetRequiredService<MainForm>());
         }
 
         private static void ConfigureServices(ServiceCollection services)
