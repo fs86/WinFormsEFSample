@@ -8,7 +8,7 @@ using WinFormsEFSample.DataAccess;
 
 namespace WinFormsEFSample.Migrations
 {
-    [DbContext(typeof(WinFormsEFSampleDbContext))]
+    [DbContext(typeof(HerbDbContext))]
     partial class WinFormsEFSampleDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

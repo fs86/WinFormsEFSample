@@ -9,7 +9,7 @@ using WinFormsEFSample.DataAccess;
 
 namespace WinFormsEFSample.Migrations
 {
-    [DbContext(typeof(WinFormsEFSampleDbContext))]
+    [DbContext(typeof(HerbDbContext))]
     [Migration("20211015074153_InitialCreate")]
     partial class InitialCreate
     {

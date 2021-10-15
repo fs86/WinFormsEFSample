@@ -2,11 +2,13 @@
 using WinFormsEFSample.DataAccess.Config;
 using WinFormsEFSample.DataAccess.Models;
 
+// ReSharper disable InconsistentNaming
+
 namespace WinFormsEFSample.DataAccess
 {
-    public class WinFormsEFSampleDbContext : DbContext
+    public class HerbDbContext : DbContext
     {
-        public WinFormsEFSampleDbContext(DbContextOptions<WinFormsEFSampleDbContext> options) : base(options)
+        public HerbDbContext(DbContextOptions<HerbDbContext> options) : base(options)
         {
         }
 

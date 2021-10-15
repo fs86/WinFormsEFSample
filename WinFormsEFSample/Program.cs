@@ -6,10 +6,12 @@ using WinFormsEFSample.DataAccess;
 using WinFormsEFSample.Forms;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using WinFormsEFSample.Service;
+using WinFormsEFSample.Service.Contract;
 
 namespace WinFormsEFSample
 {
-    static class Program
+    internal static class Program
     {
         public static IConfiguration Configuration { get; set; }
 
@@ -17,7 +19,7 @@ namespace WinFormsEFSample
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        private static void Main()
         {
             var configBuilder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
@@ -36,7 +38,7 @@ namespace WinFormsEFSample
 
             using (var serviceScope = serviceProvider.GetService<IServiceScopeFactory>()?.CreateScope())
             {
-                var context = serviceScope?.ServiceProvider.GetRequiredService<WinFormsEFSampleDbContext>();
+                var context = serviceScope?.ServiceProvider.GetRequiredService<HerbDbContext>();
                 context?.Database.EnsureCreated();
             }
 
@@ -47,17 +49,17 @@ namespace WinFormsEFSample
 
         private static void ConfigureServices(ServiceCollection services)
         {
-            //.AddScoped<IBusinessLayer, CBusinessLayer>()
-            //.AddScoped<IBusinessLayer, CBusinessLayer>()
-            //.AddSingleton<IDataAccessLayer, CDataAccessLayer>();
-
             var connectionString = Configuration.GetSection("appSettings")
                 .Get<AppConfig>().ConnectionString;
 
-            services.AddLogging(configure => configure.AddConsole())
-                .AddScoped<MainForm>()
-                .AddDbContext<WinFormsEFSampleDbContext>(
-                    options => options.UseSqlServer(connectionString));
+            services.AddLogging(loggingBuilder => loggingBuilder.AddConsole());
+            services.AddDbContext<HerbDbContext>(options => options.UseSqlServer(connectionString));
+
+            // Add Business Logic services here
+            services.AddTransient<IHerbService, HerbService>();
+
+            // Main entry point
+            services.AddScoped<MainForm>();
         }
     }
 }

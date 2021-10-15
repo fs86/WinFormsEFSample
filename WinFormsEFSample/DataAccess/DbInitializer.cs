@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using WinFormsEFSample.DataAccess.Models;
 
@@ -12,10 +11,15 @@ namespace WinFormsEFSample.DataAccess
         {
             var herbs = new Herb[]
             {
-                new Herb
+                new()
                 {
-                    Id = new Guid("d6b2ae7f-82f4-4099-86a9-556a62338271"),
+                    Id = new Guid("C7660F77-9962-45EE-A601-CFA7799AA85E"),
                     Name = "Anis",
+                },
+                new()
+                {
+                    Id = new Guid("32F2A89A-D70D-4EBE-8ED5-69DAB23501C8"),
+                    Name = "Basilikum"
                 }
             };
 
@@ -23,12 +27,19 @@ namespace WinFormsEFSample.DataAccess
 
             var seasons = new Season[]
             {
-                new Season
+                new()
                 {
-                    Id = new Guid("e358d618-d376-439a-9cd3-5e2c02849103"),
+                    Id = new Guid("8AF96254-D025-4F5C-A56C-9B4CEF659CA6"),
                     HerbId = herbs.First(herb => herb.Name == "Anis").Id,
                     From = "September",
                     To = "November"
+                },
+                new()
+                {
+                    Id = new Guid("00B2619F-9536-4CE0-9E63-780C95F3BCE5"),
+                    HerbId = herbs.First(herb => herb.Name == "Basilikum").Id,
+                    From = "juni",
+                    To = "September"
                 }
             };
 
