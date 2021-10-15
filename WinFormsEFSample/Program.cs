@@ -13,27 +13,22 @@ namespace WinFormsEFSample
 {
     internal static class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
         [STAThread]
         private static void Main()
         {
-            Application.SetHighDpiMode(HighDpiMode.SystemAware);
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
             var services = new ServiceCollection();
 
             ConfigureServices(services);
 
             using var serviceProvider = services.BuildServiceProvider();
 
-            using (var serviceScope = serviceProvider.GetService<IServiceScopeFactory>()?.CreateScope())
-            {
-                var context = serviceScope?.ServiceProvider.GetRequiredService<HerbDbContext>();
-                context?.Database.EnsureCreated();
-            }
+            using var serviceScope = serviceProvider.GetService<IServiceScopeFactory>()?.CreateScope();
+            var context = serviceScope?.ServiceProvider.GetRequiredService<HerbDbContext>();
+            context?.Database.EnsureCreated();
+
+            Application.SetHighDpiMode(HighDpiMode.SystemAware);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
 
             Application.Run(serviceProvider.GetRequiredService<MainForm>());
         }
