@@ -33,6 +33,13 @@ namespace WinFormsEFSample
             ConfigureServices(services);
 
             using var serviceProvider = services.BuildServiceProvider();
+
+            using (var serviceScope = serviceProvider.GetService<IServiceScopeFactory>()?.CreateScope())
+            {
+                var context = serviceScope?.ServiceProvider.GetRequiredService<WinFormsEFSampleDbContext>();
+                context?.Database.EnsureCreated();
+            }
+
             var mainForm = serviceProvider.GetRequiredService<MainForm>();
 
             Application.Run(mainForm);
